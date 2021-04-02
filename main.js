@@ -3,6 +3,11 @@ const readlineSync = require('readline-sync')
 const { hangingState } = require('./hangmanAscii')
 const { checkScore, higherScore } = require('./score')
 
+
+if (process.argv[2] === '-h' || process.argv[2] === '--highscore') {
+  higherScore()
+  process.exit(0)
+}
 const word = randomWord('hangman.txt')
 //console.log(word) if you want to know the word
 
