@@ -4,7 +4,7 @@ const { hangingState } = require('./hangmanAscii')
 const { checkScore, higherScore } = require('./score')
 
 const word = randomWord('hangman.txt')
-//console.log(word)
+//console.log(word) if you want to know the word
 
 let isSearching = true
 let hiddingWord = '_ '.repeat(word.length)

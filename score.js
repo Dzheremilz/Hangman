@@ -19,6 +19,8 @@ exports.checkScore = (player, score) => {
   }
 }
 
+//TODO: higher score is share by x player / podium
+
 exports.higherScore = () => {
   let scoreJson
   try {
