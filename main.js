@@ -1,6 +1,7 @@
 const { randomWord } = require('./word')
 const readlineSync = require('readline-sync')
 const { hangingState } = require('./hangmanAscii')
+const { checkScore, higherScore } = require('./score')
 
 const word = randomWord('hangman.txt')
 //console.log(word)
@@ -12,11 +13,13 @@ let nbTry = 7
 let hangState = 0
 let score = 0
 
+const player = readlineSync.question('Enter your name: ')
 
 while (isSearching) {
   console.log('Try to guess: ', hiddingWord, guessArray.length > 0 ? `\nAlready use: ${guessArray.join(' ')}` : '')
-  const answer = readlineSync.question('Choose one letter or guess the word: ').toLowerCase()
+  const answer = readlineSync.question('Choose one letter: ').toLowerCase()
   score++
+  // TODO: possibilite de rentre le bon mot directement
   /*
   if (word === answer) {
     console.log('CONGRATURATION !!!')
@@ -24,11 +27,11 @@ while (isSearching) {
   }
   */
   if (answer.length !== 1 || (answer.charCodeAt(0) < 97 || answer.charCodeAt(0) > 122)) {
-    console.log('Error: Choose one letter or guess the word\n')
+    console.log('Error: Choose one letter\n')
     continue
   }
   if (guessArray.includes(answer)) {
-    console.log(`Vous avez déja essayé avec ${answer}`)
+    console.log(`You have already tried with: ${answer}`)
     continue
   } else {
     guessArray.push(answer)
@@ -46,21 +49,20 @@ while (isSearching) {
     hangingState(hangState)
   }
   if (hiddingWord.indexOf('_') === -1) {
-    console.log('CONGLATURATION !!!')
+    console.log(`CONGLATURATION ${player.toUpperCase()}!!!`)
     isSearching = false
   }
   if (hangState === nbTry) {
-    console.log(`Game Over\nLe mot à trouver était: ${word}`)
+    console.log(`Game Over\nThe word to find was: ${word}`)
     score = 0
     isSearching = false
   }
 }
 
 console.log(`Your score: ${score}`)
-/*
+
+//TODO: gestion du score, à améliorer ~
 if (score > 0) {
-  const player = readlineSync.question('Enter your name: ')
-  // compare score to highscore
-  //newScore(player, score)
+  checkScore(player, score)
 }
-*/
+higherScore()
