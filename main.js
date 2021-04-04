@@ -1,73 +1,62 @@
-const { randomWord } = require('./word')
 const readlineSync = require('readline-sync')
-const { hangingState } = require('./hangmanAscii')
+const chalk = require('chalk')
+const { randomWord } = require('./word')
 const { checkScore, higherScore } = require('./score')
+const { game } = require('./game')
+const { credits } = require('./credits')
+const { addHistory, showHistory } = require('./history')
+const { initialisation, settings } = require('./settings')
 
+let options = JSON.parse(initialisation())
 
 if (process.argv[2] === '-h' || process.argv[2] === '--highscore') {
   higherScore()
   process.exit(0)
 }
-const word = randomWord('hangman.txt')
-//console.log(word) if you want to know the word
 
-let isSearching = true
-let hiddingWord = '_ '.repeat(word.length)
-let guessArray = []
-let nbTry = 7
-let hangState = 0
-let score = 0
+// Menu
+let menu = true
+while (menu) {
+  console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '====MENU====\n\nChoose an option number:')
+  let tempQ1 = `[1] Play\n[2] Highscore\n[3] History\n[4] Settings\n[5] Credits\n[0] Exit\n`
+  let menuChoice = readlineSync.keyIn(options.color ? chalk.keyword(options.color)(tempQ1) : tempQ1, { hideEchoBack: true, mask: '', limit: '$<0-5>' })
+  menuChoice = Number(menuChoice)
 
-const player = readlineSync.question('Enter your name: ')
+  switch (menuChoice) {
+    case 1:
+      console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '====Play====')
+      //console.log(word) if you want to know the word
+      const word = randomWord(options.category)
 
-while (isSearching) {
-  console.log('Try to guess: ', hiddingWord, guessArray.length > 0 ? `\nAlready use: ${guessArray.join(' ')}` : '')
-  const answer = readlineSync.question('Choose one letter: ').toLowerCase()
-  score++
-  // TODO: possibilite de rentre le bon mot directement
-  /*
-  if (word === answer) {
-    console.log('CONGRATURATION !!!')
-    break
-  }
-  */
-  if (answer.length !== 1 || (answer.charCodeAt(0) < 97 || answer.charCodeAt(0) > 122)) {
-    console.log('Error: Choose one letter\n')
-    continue
-  }
-  if (guessArray.includes(answer)) {
-    console.log(`You have already tried with: ${answer}`)
-    continue
-  } else {
-    guessArray.push(answer)
-  }
-  if (word.includes(answer)) {
-    for (let i = 0; i < word.length; i++) {
-      let tempArr = hiddingWord.split(' ')
-      if (word[i] === answer) {
-        tempArr[i] = answer
+      let gameObj = game(word, options.color)
+      //TODO: gestion du score, à améliorer ~
+      addHistory(word, gameObj.score, gameObj.player)
+      if (gameObj.score > 0) {
+        checkScore(gameObj.player, gameObj.score)
       }
-      hiddingWord = tempArr.join(' ')
-    }
-  } else {
-    hangState++
-    hangingState(hangState)
-  }
-  if (hiddingWord.indexOf('_') === -1) {
-    console.log(`CONGLATURATION ${player.toUpperCase()}!!!`)
-    isSearching = false
-  }
-  if (hangState === nbTry) {
-    console.log(`Game Over\nThe word to find was: ${word}`)
-    score = 0
-    isSearching = false
+      console.log()
+      break
+    case 2:
+      console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '==Highscore==\n')
+      higherScore()
+      console.log()
+      break
+    case 3:
+      console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '===History===\n')
+      let history = showHistory()
+      console.log(history)
+      break
+    case 4:
+      options = settings()
+      console.log()
+      break
+    case 5:
+      console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '===Credits===\n')
+      credits()
+      console.log()
+      break
+    case 0:
+      console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '====Exit====\n')
+      menu = false
   }
 }
-
-console.log(`Your score: ${score}`)
-
-//TODO: gestion du score, à améliorer ~
-if (score > 0) {
-  checkScore(player, score)
-}
-higherScore()

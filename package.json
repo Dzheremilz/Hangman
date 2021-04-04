@@ -1,9 +1,10 @@
 {
-  "name": "Hangman",
+  "name": "hangman",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^4.1.0",
     "readline-sync": "^1.4.10"
   }
 }

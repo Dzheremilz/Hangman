@@ -1,5 +1,7 @@
 const { readFileSync, writeFileSync } = require('fs')
 
+//TODO Check existance / create if missing
+
 exports.checkScore = (player, score) => {
   let scoreJson
   try {
@@ -9,17 +11,17 @@ exports.checkScore = (player, score) => {
     process.exit(1)
   }
   const scoreObj = JSON.parse(scoreJson)
-  if (player in scoreObj && scoreObj[player] < score) {
-    console.log('Your previous score was higher')
+  if (player in scoreObj && scoreObj[player] <= score) {
+    console.log('Your previous score was equal or higher')
   } else {
     scoreObj[player] = score
     scoreJson = JSON.stringify(scoreObj)
     writeFileSync('./score.json', scoreJson)
-    console.log('Update with your new score')
+    console.log('Update with your new best score')
   }
 }
 
-//TODO: higher score is share by x player / podium
+//TODO: podium
 
 exports.higherScore = () => {
   let scoreJson
@@ -32,6 +34,6 @@ exports.higherScore = () => {
   const scoreObj = JSON.parse(scoreJson)
   let scoreArr = Object.values(scoreObj)
   let highScore = Math.min(...scoreArr)
-  let highPlayer = Object.keys(scoreObj).find(key => scoreObj[key] === highScore)
-  console.log(`The High Score is: ${highScore} by ${highPlayer}`)
+  let highPlayer = Object.keys(scoreObj).filter(key => scoreObj[key] === highScore)
+  console.log(`The High Score is: ${highScore} by ${highPlayer.join(', ')}`)
 }
