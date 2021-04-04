@@ -1,1 +1,3 @@
 # Hangman
+
+`node main.js`
