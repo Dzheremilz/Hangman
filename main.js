@@ -25,26 +25,26 @@ while (menu) {
   switch (menuChoice) {
     case 1:
       console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '====Play====')
-      //console.log(word) if you want to know the word
       const word = randomWord(options.category)
 
       let gameObj = game(word, options.color)
       //TODO: gestion du score, à améliorer ~
       addHistory(word, gameObj.score, gameObj.player)
       if (gameObj.score > 0) {
-        checkScore(gameObj.player, gameObj.score)
+        let tempScore = checkScore(gameObj.player, gameObj.score)
+        console.log(options.color ? chalk.keyword(options.color)(tempScore) : tempScore)
       }
       console.log()
       break
     case 2:
       console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '==Highscore==\n')
-      higherScore()
+      console.log(options.color ? chalk.keyword(options.color)(higherScore()) : higherScore())
       console.log()
       break
     case 3:
       console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '===History===\n')
       let history = showHistory()
-      console.log(history)
+      console.log(options.color ? chalk.keyword(options.color)(history) : history)
       break
     case 4:
       options = settings()

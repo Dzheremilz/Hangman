@@ -12,12 +12,12 @@ exports.checkScore = (player, score) => {
   }
   const scoreObj = JSON.parse(scoreJson)
   if (player in scoreObj && scoreObj[player] <= score) {
-    console.log('Your previous score was equal or higher')
+    return 'Your previous score was equal or higher'
   } else {
     scoreObj[player] = score
     scoreJson = JSON.stringify(scoreObj)
     writeFileSync('./score.json', scoreJson)
-    console.log('Update with your new best score')
+    return 'Update with your new best score'
   }
 }
 
@@ -35,5 +35,6 @@ exports.higherScore = () => {
   let scoreArr = Object.values(scoreObj)
   let highScore = Math.min(...scoreArr)
   let highPlayer = Object.keys(scoreObj).filter(key => scoreObj[key] === highScore)
-  console.log(`The High Score is: ${highScore} by ${highPlayer.join(', ')}`)
+  //console.log(`The High Score is: ${highScore} by ${highPlayer.join(', ')}`)
+  return `The High Score is: ${highScore} by ${highPlayer.join(', ')}`
 }

@@ -58,7 +58,7 @@ exports.settings = () => {
     }
     while (menuChoice === 2) {
       console.log(options.color ? chalk.keyword(options.color)(`%s`) : `%s`, '=Word Category=\n')
-      let tempQ3 = '[1] Super-Heroes\n[2] Fruits and vegetables\n[3] Default\n[0] Exit Category Menu'
+      let tempQ3 = '[1] Super-Heroes\n[2] Fruits and vegetables\n[3] Default\n[0] Exit Category Menu\n'
       let categoryChoice = readlineSync.keyIn((options.color ? chalk.keyword(options.color)(tempQ3) : tempQ3), { hideEchoBack: true, mask: '', limit: '$<0-3>' })
       categoryChoice = Number(categoryChoice)
       switch (categoryChoice) {
@@ -78,7 +78,6 @@ exports.settings = () => {
           menuChoice = -1
           jsonStr = JSON.stringify(options)
           fs.writeFileSync('settings.json', jsonStr)
-          console.log()
           break
       }
     }

@@ -31,11 +31,12 @@ exports.game = (word, color) => {
     score++
     // TODO: possibilite de rentre le bon mot directement
     if (answer === '0') {
-      console.log('\n====EXIT====')
+      console.log(color ? chalk.keyword(color)(`%s`) : `%s`, '\n====EXIT====')
       process.exit(0)
     }
     if (answer === '!') {
-      const wordGuess = readlineSync.question('Guess the word: ').toLowerCase()
+      let tempGuessWord = 'Guess the word: '
+      const wordGuess = readlineSync.question(color ? chalk.keyword(color)(tempGuessWord) : tempGuessWord).toLowerCase()
       if (wordGuess === word || wordGuess === 'thereisnocowlevel') {
         console.log(chalk.green('GG', wordGuess === word ? player : 'cheater'))
         break
@@ -47,7 +48,7 @@ exports.game = (word, color) => {
           score = 0
           isSearching = false
         }
-        console.log('raté')
+        console.log(chalk.red('raté'))
         continue
       }
     }
@@ -58,7 +59,7 @@ exports.game = (word, color) => {
     }
     */
     if (guessArray.includes(answer)) {
-      console.log(`You have already tried with: ${answer}`)
+      console.log(color ? chalk.keyword(color)(`%s`) : `%s`, `You have already tried with: ${answer}`)
       continue
     } else {
       guessArray.push(answer)
@@ -86,6 +87,6 @@ exports.game = (word, color) => {
     }
   }
 
-  console.log(`Your score: ${score}`)
+  console.log(color ? chalk.keyword(color)(`%s`) : `%s`, `Your score: ${score}`)
   return { player: player, score: score }
 }
