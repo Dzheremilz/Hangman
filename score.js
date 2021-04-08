@@ -15,7 +15,7 @@ exports.checkScore = (player, score) => {
     return 'Your previous score was equal or higher'
   } else {
     scoreObj[player] = score
-    scoreJson = JSON.stringify(scoreObj)
+    scoreJson = JSON.stringify(scoreObj, null, 1)
     writeFileSync('./score.json', scoreJson)
     return 'Update with your new best score'
   }

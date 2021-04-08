@@ -5,7 +5,7 @@ const { resetHistory } = require('./history')
 
 const reset = () => {
   let byDefault = { color: false, category: 'hangman.txt' }
-  let json = JSON.stringify(byDefault)
+  let json = JSON.stringify(byDefault, null, 1)
   fs.writeFileSync('settings.json', json)
   return byDefault
 }
@@ -51,7 +51,7 @@ exports.settings = () => {
           break
         case 0:
           menuChoice = -1
-          jsonStr = JSON.stringify(options)
+          jsonStr = JSON.stringify(options, null, 1)
           fs.writeFileSync('settings.json', jsonStr)
           break
       }
@@ -76,7 +76,7 @@ exports.settings = () => {
           break
         case 0:
           menuChoice = -1
-          jsonStr = JSON.stringify(options)
+          jsonStr = JSON.stringify(options, null, 1)
           fs.writeFileSync('settings.json', jsonStr)
           break
       }
